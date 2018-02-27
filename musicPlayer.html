@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script type='ran.js'></script>
+	<title>music_player</title>
+	<script type="ran.js"></script>
+	<style>
+		.ran-button {
+    		background-color: #e7b7b2; 
+		    border: none;
+		    color: white;
+		    padding: 15px 32px;
+		    text-align: center;
+		    text-decoration: none;
+		    display: inline-block;
+		    font-size: 16px;
+		}
+
+
+	</style>
+</head>
+<body>
+	<audio id='id-audio-player' controls="controls" src="./music/1.mp3" src="./music/2.mp3" src="./music/3.mp3" src="./music/4.mp3" src="./music/5.mp3">
+	</audio >
+	<div>
+		<div>
+			<button class='ran-button' id='id-button-play'>开始播放</button>
+			<button class='ran-button' id='id-button-pause'>暂停播放</button>
+			<button class='ran-button' id='id-button-loop'>循环播放</button>
+			<button class='ran-button' id='id-button-random'>随机播放</button>
+		</div>
+		<div>
+			<span class='ran-time' id='id-span-currenttime'></span>
+			<span class='ran-time' id='id-span-totaltime'></span>
+		</div>
+		
+	</div>
+	<script>
+		var log = console.log.bind(console)
+		var e = function(sel) {
+			return document.querySelector(sel)
+		}
+		var a = e('#id-audio-player')
+		//播放
+		var p = e('#id-button-play')
+		var playSong = function() {
+			p.addEventListener('click',function(event) {
+				log('开始播放')
+				a.play()
+			})
+		}
+		//暂停
+		var s = e('#id-button-pause')
+		var stopSong = function(){
+			s.addEventListener('click', function(event) {
+				log('暂停播放')
+				a.pause()
+			})
+		}
+		
+
+		var songs =['./music/1.mp3','./music/2.mp3','./music/3.mp3','./music/4.mp3','./music/5.mp3']
+		var index = 0 
+		//循环播放
+		var op = e('#id-button-loop')
+		var nextSong = function() {
+			log('index-initial',index)
+			let index = (index + songs.length + 1) % songs.length
+			return songs[index]
+		}	
+		var loopPlay = function() {
+			a.addEventListener('ended', function(){
+			log('播放完毕，顺序播放')
+			var song = nextSong()
+			a.src = song
+			log('index in order', index)
+			a.play()
+		 })
+		}
+		var loopPlayStart = function() {
+			op.addEventListener('click', function(){
+				a.play()
+				loopPlay()
+			})
+		}
+		//随机播放
+		var rp = e('#id-button-random')
+		var randomSong = function() {
+			let length = songs.length
+			let r = Math.random()
+			index = Math.floor((length * r))
+			log('index in random',index)
+			return songs[index]
+		}
+		var randomPlay = function() {
+			a.addEventListener('ended', function(event){
+				log('播放完毕，随机播放')
+				var song = randomSong()
+				a.src = song
+				log('songinrandom', song)
+				a.play()
+			})
+		}
+		var randomPlayStart = function() {
+			rp.addEventListener('click', function(){
+				a.play()
+				randomPlay()
+			})		
+		}
+		//当前时间
+		
+		//总时间
+	
+		var __main = function() {
+			playSong()
+			stopSong()
+			loopPlayStart()
+			randomPlayStart()
+
+		}
+		__main()
+	</script>
+
+
+</body>
+</html>
